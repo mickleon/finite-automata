@@ -30,11 +30,12 @@ automaton.transition(1); // current_state = ẟ(0, 1);
 assert_eq!(automaton.get_current_state(), 1);
 ```
 
-Length of arrays in `transitions` map is constant (`ALPHABET_LEN`).
+Length of arrays in `transitions` map is constant (`ALPHABET_LEN`). This code can not be compiled:
 
 ```compile_fail
-# use std::collections::{HashMap, HashSet};
-# use finite_automata::DFAutomaton;
+use std::collections::{HashMap, HashSet};
+use finite_automata::DFAutomaton;
+
 let mut automaton = DFAutomaton::from(
     0,
     HashSet::from([0]),
