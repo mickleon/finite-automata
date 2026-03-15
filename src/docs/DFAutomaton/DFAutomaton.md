@@ -23,22 +23,21 @@ let mut automaton = DFAutomaton::from_arrays(
     &transitions
 );
 
-assert!(automaton.run(['0', '1', '1', '0']));
-assert!(!automaton.run(['1', '1', '1', '0']));
+assert!(automaton.run(['0', '1', '1', '0']).unwrap());
+assert!(!automaton.run(['1', '1', '1', '0']).unwrap());
 
 automaton.reset();
 assert_eq!(automaton.get_current_state(), 0);
 
-automaton.step('1'); // current_state = ẟ(0, '1');
+automaton.step('1').unwrap(); // current_state = ẟ(0, '1');
 assert_eq!(automaton.get_current_state(), 1);
 assert!(!automaton.is_accepting());
 ```
 
-Length of arrays in transitions map is constant and their order is according to alphabet. This code can not be compiled:
+Length of arrays in transitions map is constant and their order is according to alphabet.
 
 ```compile_fail
-use finite_automata::DFAutomaton;
-
+# use finite_automata::DFAutomaton;
 let mut automaton = DFAutomaton::from_arrays(
     0, &[0], &['0', '1'], // `alphabet` length is 2
     &[

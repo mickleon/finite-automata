@@ -23,7 +23,10 @@ fn main() {
             .expect("Failed to read line");
 
         let input_iter = input_string.trim().chars();
-        println!("{}", automaton.run(input_iter));
+        match automaton.run(input_iter) {
+            Ok(accepted) => println!("{}", accepted),
+            Err(e) => println!("Error: {}", e),
+        }
         input_string.clear();
     }
 }
