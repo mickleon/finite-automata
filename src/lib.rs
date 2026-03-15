@@ -17,14 +17,29 @@ impl<const ALPHABET_LEN: usize> DFAutomaton<ALPHABET_LEN> {
         accept_states: HashSet<u32>,
         transitions: HashMap<u32, [u32; ALPHABET_LEN]>,
     ) -> Self {
-        if !(transitions.contains_key(&init_state)) {
-            panic!("Initial state must be as a key in the `next_states` map");
-        }
-
         for state in accept_states.iter() {
             if !transitions.contains_key(state) {
-                panic!("All finite states must be as a key in the `next_states` map");
+                panic!("All finite states must be a key in the `transitions` map");
             }
+        }
+
+        let mut init_state_in_transition_map = false;
+
+        transitions.iter().for_each(|(state, transitions_values)| {
+            if !init_state_in_transition_map && *state == init_state {
+                init_state_in_transition_map = true;
+            }
+            for transition in transitions_values {
+                if !transitions.contains_key(transition) {
+                    panic!(
+                        "All transitions values in `trasitions` map must be a key in the `transitions` map"
+                    );
+                }
+            }
+        });
+
+        if !init_state_in_transition_map {
+            panic!("Initial state must be a key in the `transitions` map");
         }
 
         Self {
