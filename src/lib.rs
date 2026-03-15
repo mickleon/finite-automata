@@ -117,16 +117,18 @@ where
     /// - if the transition for `symbol` not defined in transitions map
     /// - `symbol` didn't passed in `alphabet` in [`Self::from_arrays`].
     pub fn step(&mut self, symbol: C) {
-        let index = *self.symbols.get(&symbol).unwrap_or_else(|| {
+        let symbol_index = *self.symbols.get(&symbol).unwrap_or_else(|| {
             panic!("Undefined input symbol: \"{}\"", symbol);
         });
 
         let states = self.transitions.get(self.current_state).unwrap_or_else(|| {
-            let state = self.states[self.current_state];
-            panic!("Undefined next state for \"{}\"", state);
+            panic!(
+                "Undefined next state for \"{}\"",
+                self.states[self.current_state]
+            );
         });
 
-        self.current_state = states[index];
+        self.current_state = states[symbol_index];
     }
 
     /// Gets a iterator `input` of DFA symbols and returns `true` if the DFA accepts this string, `false` otherwise.

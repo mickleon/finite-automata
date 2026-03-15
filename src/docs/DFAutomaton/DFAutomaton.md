@@ -1,4 +1,4 @@
-Struct for emulating of Deterministic Finite Automaton (DFA).
+Struct for emulating a Deterministic Finite Automaton (DFA).
 
 # Examples
 
