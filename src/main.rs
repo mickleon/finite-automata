@@ -1,5 +1,3 @@
-use std::io;
-
 use finite_automata::DFAutomaton;
 
 fn main() {
@@ -18,7 +16,7 @@ fn main() {
 
     let mut input_string = String::new();
     loop {
-        io::stdin()
+        std::io::stdin()
             .read_line(&mut input_string)
             .expect("Failed to read line");
 

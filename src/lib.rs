@@ -20,6 +20,7 @@ impl<C: fmt::Display> fmt::Display for StepError<C> {
 }
 
 #[doc = include_str!("docs/DFAutomaton/DFAutomaton.md")]
+#[derive(Debug, Clone)]
 pub struct DFAutomaton<S, C, const N: usize> {
     init_state: usize,
     accept_states: HashSet<usize>,
@@ -50,15 +51,17 @@ where
         alphabet: &[C; N],
         transitions: &[(S, [S; N])],
     ) -> Self {
+        // map Symbol -> Index
         let symbols_map: HashMap<C, usize> = alphabet
             .iter()
             .enumerate()
             .map(|(index, &symbol)| (symbol, index))
             .collect();
 
+        // temporary map State -> Index
         let mut state_indices: HashMap<S, usize> = HashMap::new();
+        // vector of states
         let mut states = Vec::new();
-
         for (index, (state, _)) in transitions.iter().enumerate() {
             if state_indices.insert(*state, index).is_some() {
                 panic!("Duplicate state in transitions map: \"{}\"", state);
@@ -66,6 +69,7 @@ where
             states.push(*state);
         }
 
+        // init state index
         let init_state_index: usize = *state_indices.get(&init_state).unwrap_or_else(|| {
             panic!(
                 "Initial state \"{}\" not defined in transitions map",
@@ -73,6 +77,7 @@ where
             )
         });
 
+        // accept states set
         let accept_states_set: HashSet<usize> = accept_states
             .iter()
             .map(|state| {
@@ -82,11 +87,10 @@ where
             })
             .collect();
 
+        // transitions table
         let mut transitions_vec: Vec<[usize; N]> = Vec::with_capacity(states.len());
-
         for (source_state, dest_states) in transitions.iter() {
             let mut row = [0; N];
-
             for (index, dest_state) in dest_states.iter().enumerate() {
                 let dest_index = *state_indices.get(dest_state).unwrap_or_else(|| {
                     panic!(
@@ -96,7 +100,6 @@ where
                 });
                 row[index] = dest_index;
             }
-
             transitions_vec.push(row);
         }
 
