@@ -133,7 +133,7 @@ where
     ///
     /// # Errors
     ///
-    /// Returns [`StepError::UndefinedSymbol`] if `symbol` is not in `alphabet` passed to [`DFAutomaton::from_arrays`].
+    /// Returns [`StepError::UndefinedSymbol`] if `symbol` is not in DFA alphabet.
     pub fn step(&mut self, symbol: C) -> Result<(), StepError<C>> {
         let symbol_index: usize = *self
             .symbols
@@ -144,13 +144,13 @@ where
         Ok(())
     }
 
-    /// Gets an iterator `input` of DFA symbols and returns `Ok(true)` if the DFA accepts this string, `Ok(false)` otherwise.
+    /// Gets an iterator `input` of DFA symbols and returns `Ok(true)` if the DFA accepts this word, `Ok(false)` otherwise.
     ///
     /// Resets the current state to the initial state before computing.
     ///
     /// # Errors
     ///
-    /// Returns [`StepError::UndefinedSymbol`] if the string contains a symbol that not in `alphabet` passed in [`DFAutomaton::from_arrays`].
+    /// Returns [`StepError::UndefinedSymbol`] if the word contains a symbol that not in DFS alphabet.
     pub fn run<I>(&mut self, input: I) -> Result<bool, StepError<C>>
     where
         I: IntoIterator<Item = C>,
