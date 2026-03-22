@@ -5,16 +5,16 @@ Struct for emulating a Deterministic Finite Automaton (DFA).
 ```rust
 use finite_automata::DFAutomaton;
 
-let init_state = 0;        // q_0 ∈ Q
-let accept_states = [0];   // F ⊆ Q
-let alphabet = ['0', '1']; // Σ
+let init_state = 'A';        // q_0 ∈ Q
+let accept_states = ['A'];   // F ⊆ Q
+let alphabet = [0, 1]; // Σ
 let transitions = [        // ẟ: Q × Σ -> Q
 // The order of the arrays is according to the order of the `alphabet`
-// | q | ẟ(q, '0') | ẟ(q, '1') |
-    (0, [2,          1]),
-    (1, [3,          0]),
-    (2, [0,          3]),
-    (3, [1,          2])
+//  | q   | ẟ(q, 0) | ẟ(q, 1) |
+    ('A', ['C',      'B']), // Accepts words with an even number of
+    ('B', ['D',      'A']), // each of the symbols 1 and 0
+    ('C', ['A',      'D']),
+    ('D', ['B',      'C'])
 ];
 let mut automaton = DFAutomaton::from_arrays(
     init_state,
@@ -23,14 +23,14 @@ let mut automaton = DFAutomaton::from_arrays(
     &transitions
 );
 
-assert!(automaton.run(['0', '1', '1', '0']).unwrap());
-assert!(!automaton.run(['1', '1', '1', '0']).unwrap());
+assert!(automaton.run([0, 1, 1, 0]).unwrap());
+assert!(!automaton.run([1, 1, 1, 0]).unwrap());
 
 automaton.reset();
-assert_eq!(automaton.get_current_state(), 0);
+assert_eq!(automaton.get_current_state(), 'A');
 
-automaton.step('1').unwrap(); // current_state = ẟ(0, '1');
-assert_eq!(automaton.get_current_state(), 1);
+automaton.step(1).unwrap(); // current_state = ẟ('A', 1);
+assert_eq!(automaton.get_current_state(), 'B');
 assert!(!automaton.is_accepting());
 ```
 

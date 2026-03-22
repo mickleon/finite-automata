@@ -1,15 +1,17 @@
 use finite_automata::DFAutomaton;
 
 fn main() {
-    let init_state = 0;
-    let accept_states = [0];
-    let alphabet = ['0', '1'];
-    #[rustfmt::skip]
+    let init_state = 'A'; // q_0 ∈ Q
+    let accept_states = ['A']; // F ⊆ Q
+    let alphabet = ['0', '1']; // Σ
     let transitions = [
-        (0, [2, 1]),
-        (1, [3, 0]),
-        (2, [0, 3]),
-        (3, [1, 2])
+        // ẟ: Q × Σ -> Q
+        // The order of the arrays is according to the order of the `alphabet`
+        //  | q | ẟ(q, 0) | ẟ(q, 1) |
+        ('A', ['C', 'B']),
+        ('B', ['D', 'A']),
+        ('C', ['A', 'D']),
+        ('D', ['B', 'C']),
     ];
     let mut automaton =
         DFAutomaton::from_arrays(init_state, &accept_states, &alphabet, &transitions);
