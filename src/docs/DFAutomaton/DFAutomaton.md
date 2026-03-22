@@ -14,14 +14,16 @@ let transitions = [        // ẟ: Q × Σ -> Q
     ('A', ['C',      'B']), // Accepts words with an even number of
     ('B', ['D',      'A']), // each of the symbols 1 and 0
     ('C', ['A',      'D']),
-    ('D', ['B',      'C'])
+    ('D', ['B',      'C']),
 ];
-let mut automaton = DFAutomaton::from_arrays(
-    init_state,
-    &accept_states,
-    &alphabet,
-    &transitions
-);
+
+let mut automaton: DFAutomaton<char, u32> = 
+    DFAutomaton::from_arrays(
+        init_state,
+        &accept_states,
+        &alphabet,
+        &transitions
+    );
 
 assert!(automaton.run([0, 1, 1, 0]).unwrap());
 assert!(!automaton.run([1, 1, 1, 0]).unwrap());
@@ -34,7 +36,7 @@ assert_eq!(automaton.get_current_state(), 'B');
 assert!(!automaton.is_accepting());
 ```
 
-Length of arrays in transitions map is constant and their order is according to alphabet.
+Order of elements of arrays in transitions map is according to alphabet.
 
 ```compile_fail
 # use finite_automata::DFAutomaton;

@@ -1,13 +1,10 @@
 use finite_automata::DFAutomaton;
 
 fn main() {
-    let init_state = 'A'; // q_0 ∈ Q
-    let accept_states = ['A']; // F ⊆ Q
-    let alphabet = ['0', '1']; // Σ
+    let init_state = 'A';
+    let accept_states = ['A'];
+    let alphabet = ['0', '1'];
     let transitions = [
-        // ẟ: Q × Σ -> Q
-        // The order of the arrays is according to the order of the `alphabet`
-        //  | q | ẟ(q, 0) | ẟ(q, 1) |
         ('A', ['C', 'B']),
         ('B', ['D', 'A']),
         ('C', ['A', 'D']),

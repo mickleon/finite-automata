@@ -21,17 +21,17 @@ impl<C: fmt::Display> fmt::Display for StepError<C> {
 
 #[doc = include_str!("docs/DFAutomaton/DFAutomaton.md")]
 #[derive(Debug, Clone)]
-pub struct DFAutomaton<S, C, const N: usize> {
+pub struct DFAutomaton<S, C> {
     init_state: usize,
     accept_states: HashSet<usize>,
-    transitions: Vec<[usize; N]>,
+    transitions: Vec<Vec<usize>>,
     current_state: usize,
 
     states: Vec<S>,
     symbols: HashMap<C, usize>,
 }
 
-impl<S, C, const N: usize> DFAutomaton<S, C, N>
+impl<S, C> DFAutomaton<S, C>
 where
     S: Eq + Hash + Copy + fmt::Display,
     C: Eq + Hash + Copy + fmt::Display,
@@ -45,7 +45,7 @@ where
     /// - elements of `accept_states` not in `transitions`
     /// - there is duplicate state in `transitions`
     /// - there is state in transition that not defined as a source state.
-    pub fn from_arrays(
+    pub fn from_arrays<const N: usize>(
         init_state: S,
         accept_states: &[S],
         alphabet: &[C; N],
@@ -88,17 +88,17 @@ where
             .collect();
 
         // transitions table
-        let mut transitions_vec: Vec<[usize; N]> = Vec::with_capacity(states.len());
+        let mut transitions_vec: Vec<Vec<usize>> = Vec::with_capacity(states.len());
         for (source_state, dest_states) in transitions.iter() {
-            let mut row = [0; N];
-            for (index, dest_state) in dest_states.iter().enumerate() {
+            let mut row = Vec::with_capacity(N);
+            for dest_state in dest_states.iter() {
                 let dest_index = *state_indices.get(dest_state).unwrap_or_else(|| {
                     panic!(
                         "State \"{}\" used in transition from \"{}\" but not defined as a source state",
                         dest_state, source_state
                     );
                 });
-                row[index] = dest_index;
+                row.push(dest_index);
             }
             transitions_vec.push(row);
         }
